@@ -1,0 +1,25 @@
+{
+  "name": "new-bazu",
+  "version": "1.0.0",
+  "description": "虹靈御所 - 八字人生兵法 | Rainbow Spirit Palace - Ba Zi Life Strategy",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve . --listen 8000",
+    "build": "echo 'Static site - no build needed'",
+    "deploy": "echo 'Use GitHub Pages or Netlify for deployment'"
+  },
+  "keywords": [
+    "bazi",
+    "chinese-astrology",
+    "fortune-telling",
+    "八字",
+    "命理",
+    "static-website"
+  ],
+  "author": "momo741006",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}
