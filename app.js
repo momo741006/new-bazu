@@ -119,4 +119,125 @@ async function fetchStory(prompt){
   console.log("1985/10/6 19:30 =>",test1.bazi); // 應=乙丑 乙酉 戊寅 壬戌
   const test2 = await generateBazi({yyyy:1990,mm:9,dd:27,hh:8});
   console.log("1990/9/27 08:32 =>",test2.bazi); // 應=庚午 乙酉 乙未 庚辰
+/* === 表單處理 + 結果填充 === */
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("input-form");
+  if (!form) return;
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const birthDate = document.getElementById("birth-date").value;
+    const birthTime = document.getElementById("birth-time").value;
+
+    if (!birthDate || !birthTime) {
+      alert("請輸入完整的出生日期與時間");
+      return;
+    }
+
+    const [yyyy, mm, dd] = birthDate.split("-").map(Number);
+    const [hh, minute] = birthTime.split(":").map(Number);
+
+    // 1. 八字計算
+    const result = await generateBazi({ yyyy, mm, dd, hh, minute });
+
+    // 2. 四柱顯示
+    document.getElementById("bazi-pillars").textContent =
+      `四柱：${result.pillars.year.pillar} ${result.pillars.month.pillar} ${result.pillars.day.pillar} ${result.pillars.hour.pillar}`;
+
+    // 3. 十神計算（簡化版，查表更準確）
+    const tenGods = calculateTenGods(result.pillars.day.gan, [
+      result.pillars.year.gan,
+      result.pillars.month.gan,
+      result.pillars.hour.gan,
+    ]);
+    document.getElementById("bazi-tengods").textContent = "十神：" + tenGods.join("，");
+
+    // 4. 納音（從 JSON 查表）
+    const nayin = await fetch("/data/nayin.json").then(res => res.json());
+    const getNaYin = (gan, zhi) => {
+      const key = gan + zhi;
+      return nayin[key] ? nayin[key].納音五行 : "未知";
+    };
+    const nY = getNaYin(result.pillars.year.gan, result.pillars.year.zhi);
+    const nM = getNaYin(result.pillars.month.gan, result.pillars.month.zhi);
+    const nD = getNaYin(result.pillars.day.gan, result.pillars.day.zhi);
+    const nH = getNaYin(result.pillars.hour.gan, result.pillars.hour.zhi);
+    document.getElementById("bazi-nayin").textContent = `納音：年(${nY}) 月(${nM}) 日(${nD}) 時(${nH})`;
+
+    // 5. 神煞（簡單示範：天乙貴人）
+    const shenshaData = await fetch("/data/shensha_cards.json").then(res => res.json());
+    const shenshaList = calculateShensha(result.pillars, shenshaData);
+    document.getElementById("bazi-shensha").textContent = "神煞：" + shenshaList.join("，");
+
+    // 6. 切換到排盤頁面
+    switchPage("bazi");
+  });
+});
+
+/* === 十神計算 === */
+function calculateTenGods(dayGan, otherGans) {
+  const results = [];
+  otherGans.forEach(g => {
+    const rel = getTenGod(dayGan, g);
+    results.push(`${g}:${rel}`);
+  });
+  return results;
+}
+
+function getTenGod(dayGan, otherGan) {
+  const dayEl = WU_XING_GAN[dayGan];
+  const otherEl = WU_XING_GAN[otherGan];
+  const dayYY = YIN_YANG_GAN[dayGan];
+  const otherYY = YIN_YANG_GAN[otherGan];
+
+  if (dayEl === otherEl) return dayYY === otherYY ? "比肩" : "劫財";
+  if (sheng(dayEl, otherEl)) return dayYY === otherYY ? "食神" : "傷官";
+  if (sheng(otherEl, dayEl)) return dayYY === otherYY ? "偏印" : "正印";
+  if (ke(dayEl, otherEl)) return dayYY === otherYY ? "偏財" : "正財";
+  if (ke(otherEl, dayEl)) return dayYY === otherYY ? "七殺" : "正官";
+  return "未知";
+}
+
+function sheng(a, b) {
+  return (
+    (a === "木" && b === "火") ||
+    (a === "火" && b === "土") ||
+    (a === "土" && b === "金") ||
+    (a === "金" && b === "水") ||
+    (a === "水" && b === "木")
+  );
+}
+function ke(a, b) {
+  return (
+    (a === "木" && b === "土") ||
+    (a === "土" && b === "水") ||
+    (a === "水" && b === "火") ||
+    (a === "火" && b === "金") ||
+    (a === "金" && b === "木")
+  );
+}
+
+/* === 神煞判斷 (示範：天乙貴人) === */
+function calculateShensha(pillars, shenshaData) {
+  const list = [];
+  const dayGan = pillars.day.gan;
+  const dayZhi = pillars.day.zhi;
+
+  // 天乙貴人查法
+  const map = {
+    "甲":["丑","未"], "戊":["丑","未"],
+    "乙":["子","申"], "己":["子","申"],
+    "丙":["亥","酉"], "丁":["亥","酉"],
+    "庚":["寅","午"], "辛":["寅","午"],
+    "壬":["卯","巳"], "癸":["卯","巳"],
+  };
+  const guiren = map[dayGan] || [];
+  Object.values(pillars).forEach(p => {
+    if (guiren.includes(p.zhi)) list.push("天乙貴人");
+  });
+
+  return list.length ? list : ["暫無神煞"];
+}
+
 })();
