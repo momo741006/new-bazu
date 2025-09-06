@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>虹靈御所 - 八字人生兵法</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 粒子背景 -->
+    <div id="particles-bg"></div>
+    
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 導航欄 -->
+        <nav class="nav-bar">
+            <div class="nav-logo">
+                <h1>虹靈御所</h1>
+                <span class="nav-subtitle">八字人生兵法</span>
+            </div>
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-page="input">資料輸入</button>
+                <button class="nav-tab" data-page="bazi">八字排盤</button>
+                <button class="nav-tab" data-page="army">四時軍團</button>
+            </div>
+        </nav>
+
+        <!-- 第一頁：資料輸入區 -->
+        <section id="page-input" class="page active">
+            <div class="page-header">
+                <h2 class="page-title">命運啟動儀式</h2>
+                <p class="page-subtitle">輸入您的出生資訊，開啟八字人生兵法之旅</p>
+            </div>
+            
+            <div class="input-container">
+                <form id="baziForm" class="input-form">
+                    <!-- 姓名輸入 -->
+                    <div class="input-group">
+                        <label class="input-label">
+                            <span class="label-text">姓名</span>
+                            <span class="label-icon">👤</span>
+                        </label>
+                        <input type="text" id="userName" class="input-field" placeholder="請輸入您的姓名" required>
+                    </div>
+
+                    <!-- 性別選擇 -->
+                    <div class="input-group">
+                        <label class="input-label">
+                            <span class="label-text">性別</span>
+                            <span class="label-icon">⚤</span>
+                        </label>
+                        <div class="gender-selector">
+                            <label class="gender-option">
+                                <input type="radio" name="gender" value="male" checked>
+                                <span class="gender-text">男性</span>
+                            </label>
+                            <label class="gender-option">
+                                <input type="radio" name="gender" value="female">
+                                <span class="gender-text">女性</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 出生日期 -->
+                    <div class="input-group">
+                        <label class="input-label">
+                            <span class="label-text">出生日期</span>
+                            <span class="label-icon">📅</span>
+                        </label>
+                        <input type="date" id="birthDate" class="input-field" required>
+                    </div>
+
+                    <!-- 出生時間 -->
+                    <div class="input-group">
+                        <label class="input-label">
+                            <span class="label-text">出生時間</span>
+                            <span class="label-icon">🕐</span>
+                        </label>
+                        <input type="time" id="birthTime" class="input-field" required>
+                    </div>
+
+                    <!-- 出生地點 -->
+                    <div class="input-group">
+                        <label class="input-label">
+                            <span class="label-text">出生地點</span>
+                            <span class="label-icon">🌍</span>
+                        </label>
+                        <select id="birthLocation" class="input-field">
+                            <option value="taiwan">台灣</option>
+                            <option value="china">中國大陸</option>
+                            <option value="hongkong">香港</option>
+                            <option value="macau">澳門</option>
+                            <option value="singapore">新加坡</option>
+                            <option value="malaysia">馬來西亞</option>
+                            <option value="other">其他地區</option>
+                        </select>
+                    </div>
+
+                    <!-- 時區選擇 -->
+                    <div class="input-group">
+                        <label class="input-label">
+                            <span class="label-text">時區</span>
+                            <span class="label-icon">🌐</span>
+                        </label>
+                        <select id="timezone" class="input-field">
+                            <option value="UTC+8">UTC+8 (台灣標準時間)</option>
+                            <option value="UTC+9">UTC+9 (日本標準時間)</option>
+                            <option value="UTC+7">UTC+7 (印尼時間)</option>
+                            <option value="UTC+0">UTC+0 (格林尼治標準時間)</option>
+                        </select>
+                    </div>
+
+                    <!-- 生成按鈕 -->
+                    <button type="submit" class="generate-btn">
+                        <span class="btn-text">啟動命運兵法</span>
+                        <span class="btn-icon">⚡</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                </form>
+
+                <!-- 隱私提示 -->
+                <div class="privacy-notice">
+                    <p>🔒 您的個人資料僅用於八字計算，不會被儲存或分享</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第二頁：傳統八字排盤區 -->
+        <section id="page-bazi" class="page">
+            <div class="page-header">
+                <h2 class="page-title">八字命盤</h2>
+                <p class="page-subtitle">傳統命理排盤，揭示命運密碼</p>
+            </div>
+
+            <div class="bazi-container">
+                <!-- 四柱主表 -->
+                <div class="pillars-section">
+                    <h3 class="section-title">四柱八字</h3>
+                    <div class="pillars-grid">
+                        <div class="pillar-card" data-pillar="year">
+                            <div class="pillar-header">
+                                <h4 class="pillar-name">年柱</h4>
+                                <span class="pillar-meaning">血脈根源</span>
+                            </div>
+                            <div class="pillar-content">
+                                <div class="pillar-chars">
+                                    <span class="gan" id="yearGan">--</span>
+                                    <span class="zhi" id="yearZhi">--</span>
+                                </div>
+                                <div class="pillar-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label">十神</span>
+                                        <span class="detail-value" id="yearTenGod">--</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">納音</span>
+                                        <span class="detail-value" id="yearNayin">--</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pillar-card" data-pillar="month">
+                            <div class="pillar-header">
+                                <h4 class="pillar-name">月柱</h4>
+                                <span class="pillar-meaning">成長歷程</span>
+                            </div>
+                            <div class="pillar-content">
+                                <div class="pillar-chars">
+                                    <span class="gan" id="monthGan">--</span>
+                                    <span class="zhi" id="monthZhi">--</span>
+                                </div>
+                                <div class="pillar-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label">十神</span>
+                                        <span class="detail-value" id="monthTenGod">--</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">納音</span>
+                                        <span class="detail-value" id="monthNayin">--</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pillar-card" data-pillar="day">
+                            <div class="pillar-header">
+                                <h4 class="pillar-name">日柱</h4>
+                                <span class="pillar-meaning">本我核心</span>
+                            </div>
+                            <div class="pillar-content">
+                                <div class="pillar-chars">
+                                    <span class="gan" id="dayGan">--</span>
+                                    <span class="zhi" id="dayZhi">--</span>
+                                </div>
+                                <div class="pillar-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label">十神</span>
+                                        <span class="detail-value" id="dayTenGod">日主</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">納音</span>
+                                        <span class="detail-value" id="dayNayin">--</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pillar-card" data-pillar="hour">
+                            <div class="pillar-header">
+                                <h4 class="pillar-name">時柱</h4>
+                                <span class="pillar-meaning">未來展望</span>
+                            </div>
+                            <div class="pillar-content">
+                                <div class="pillar-chars">
+                                    <span class="gan" id="hourGan">--</span>
+                                    <span class="zhi" id="hourZhi">--</span>
+                                </div>
+                                <div class="pillar-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label">十神</span>
+                                        <span class="detail-value" id="hourTenGod">--</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">納音</span>
+                                        <span class="detail-value" id="hourNayin">--</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 藏干詳細 -->
+                <div class="hidden-stems-section">
+                    <h3 class="section-title">地支藏干</h3>
+                    <div class="hidden-stems-grid">
+                        <div class="hidden-stem-item" data-zhi="year">
+                            <h4 class="zhi-name" id="yearZhiName">--</h4>
+                            <div class="hidden-stems" id="yearHiddenStems">
+                                <span class="hidden-stem">--</span>
+                            </div>
+                        </div>
+                        <div class="hidden-stem-item" data-zhi="month">
+                            <h4 class="zhi-name" id="monthZhiName">--</h4>
+                            <div class="hidden-stems" id="monthHiddenStems">
+                                <span class="hidden-stem">--</span>
+                            </div>
+                        </div>
+                        <div class="hidden-stem-item" data-zhi="day">
+                            <h4 class="zhi-name" id="dayZhiName">--</h4>
+                            <div class="hidden-stems" id="dayHiddenStems">
+                                <span class="hidden-stem">--</span>
+                            </div>
+                        </div>
+                        <div class="hidden-stem-item" data-zhi="hour">
+                            <h4 class="zhi-name" id="hourZhiName">--</h4>
+                            <div class="hidden-stems" id="hourHiddenStems">
+                                <span class="hidden-stem">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 神煞系統 -->
+                <div class="shensha-section">
+                    <h3 class="section-title">神煞兵符</h3>
+                    <div class="shensha-container">
+                        <div class="shensha-category">
+                            <h4 class="category-title">吉神</h4>
+                            <div class="shensha-list" id="goodShensha">
+                                <!-- 動態生成 -->
+                            </div>
+                        </div>
+                        <div class="shensha-category">
+                            <h4 class="category-title">凶煞</h4>
+                            <div class="shensha-list" id="badShensha">
+                                <!-- 動態生成 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第三頁：四時軍團分析區 -->
+        <section id="page-army" class="page">
+            <div class="page-header">
+                <h2 class="page-title">四時軍團召喚</h2>
+                <p class="page-subtitle">命運戰場，四大軍團集結完畢</p>
+            </div>
+
+            <div class="army-container">
+                <!-- 四大軍團卡片 -->
+                <div class="army-grid">
+                    <!-- 家族兵團 (年柱) -->
+                    <div class="army-card" data-army="family" data-color="gold-green">
+                        <div class="army-header">
+                            <div class="army-title">
+                                <h3 class="army-name">家族兵團</h3>
+                                <span class="army-pillar">年柱</span>
+                            </div>
+                            <div class="army-element" id="familyElement">--</div>
+                        </div>
+                        
+                        <div class="army-content">
+                            <!-- 主將 -->
+                            <div class="role-section">
+                                <div class="role-header">
+                                    <span class="role-icon">👑</span>
+                                    <span class="role-title">主將</span>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name" id="familyGeneral">--</span>
+                                    <span class="role-desc">統領全軍，決定戰略方向</span>
+                                </div>
+                            </div>
+
+                            <!-- 軍師 -->
+                            <div class="role-section">
+                                <div class="role-header">
+                                    <span class="role-icon">🧙</span>
+                                    <span class="role-title">軍師</span>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name" id="familyAdvisor">--</span>
+                                    <span class="role-desc">智謀策劃，輔助決策</span>
+                                </div>
+                            </div>
+
+                            <!-- 副將 -->
+                            <div class="role-section">
+                                <div class="role-header">
+                                    <span class="role-icon">⚔️</span>
+                                    <span class="role-title">副將</span>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name" id="familyViceGeneral">--</span>
+                                    <span class="role-desc">支援力量，執行戰術</span>
+                                </div>
+                            </div>
+
+                            <!-- 奇謀 -->
+                            <div class="role-section">
+                                <div class="role-header">
+                                    <span class="role-icon">🎭</span>
+                                    <span class="role-title">奇謀</span>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name" id="familyStrategist">--</span>
+                                    <span class="role-desc">潛在能力，特殊戰法</span>
+                                </div>
+                            </div>
+
+                            <!-- 納音戰場 -->
+                            <div class="battlefield-section">
+                                <div class="battlefield-header">
+                                    <span class="battlefield-icon">🏟️</span>
+                                    <span class="battlefield-title">納音戰場</span>
+                                </div>
+                                <div class="battlefield-info">
+                                    <span class="battlefield-name" id="familyBattlefield">--</span>
+                                </div>
+                            </div>
+
+                            <!-- 神煞兵符 -->
+                            <div class="symbols-section">
+                                <div class="symbols-header">
+                                    <span class="symbols-icon">🎖️</span>
+                                    <span class="symbols-title">神煞兵符</span>
+                                </div>
+                                <div class="symbols-list" id="familySymbols">
+                                    <!-- 動態生成 -->
+                                </div>
+                            </div>
+
+                            <!-- AI軍團故事 -->
+                            <div class="story-section">
+                                <div class="story-header">
+                                    <span class="story-icon">📜</span>
+                                    <span class="story-title">軍團傳說</span>
+                                </div>
+                                <div class="story-content">
+                                    <p class="story-text" id="familyStory">神秘力量匯聚，命運之輪轉動...</p>
+                                </div>
+                            </div>
+
+                            <!-- 一句話建議 -->
+                            <div class="advice-section">
+                                <div class="advice-content">
+                                    <span class="advice-icon">💡</span>
+                                    <p class="advice-text" id="familyAdvice">承載家族傳承的神秘力量</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 成長兵團 (月柱) -->
+                    <div class="army-card" data-army="growth" data-color="green-yellow">
+                        <div class="army-header">
+                            <div class="army-title">
+                                <h3 class="army-name">成長兵團</h3>
+                                <span class="army-pillar">月柱</span>
+                            </div>
+                            <div class="army-element" id="growthElement">--</div>
+                        </div>
+                        
+                        <div class="army-content">
+                            <!-- 主將 -->
+                            <div class="role-section">
+                                <div class="role-header">
+                                    <span class="role-icon">👑</span>
+                                    <span class="role-title">主將</span>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name" id="growthGeneral">--</span>
+                                    <span class="role-desc">統領全軍，決定戰略方向</span>
+                                </div>
+                            </div>
+
+                            <!-- 軍師 -->
+                            <div class="role-section">
+                                <div class="role-header">
+                                    <span class="role-icon">🧙</span>
+                                    <span class="role-title">軍師</span>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name" id="growthAdvisor">--</span>
+                                    <span class="role-desc">智謀策劃，輔助決策</span>
+                                </div>
+                            </div>
+
+                            <!-- 副將 -->
+                            <div class="role-section">
+                                <div class="role-header">
+                                    <span class="role-icon">⚔️</span>
+                                    <span class="role-title">副將</span>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name" id="growthViceGeneral">--</span>
+                                    <span class="role-desc">支援力量，執行戰術</span>
+                                </div>
+                            </div>
+
+                            <!-- 奇謀 -->
+                            <div class="role-section">
+                                <div class="role-header">
+                                    <span class="role-icon">🎭</span>
+                                    <span class="role-title">奇謀</span>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name" id="growthStrategist">--</span>
+                                    <span class="role-desc">潛在能力，特殊戰法</span>
+                                </div>
+                            </div>
+
+                            <!-- 納音戰場 -->
+                            <div class="battlefield-section">
+                                <div class="battlefield-header">
+                                    <span class="battlefield-icon">🏟️</span>
+                                    <span class="battlefield-title">納音戰場</span>
+                                </div>
+                                <div class="battlefield-info">
+                                    <span class="battlefield-name" id="growthBattlefield">--</span>
+                                </div>
+                            </div>
+
+                            <!-- 神煞兵符 -->
+                            <div class="symbols-section">
+                                <div class="symbols-header">
+                                    <span class="symbols-icon">🎖️</span>
+                                    <span class="symbols-title">神煞兵符</span>
+                                </div>
+                                <div class="symbols-list" id="growthSymbols">
+                                    <!-- 動態生成 -->
+                                </div>
+                            </div>
+
+                            <!-- AI軍團故事 -->
+                            <div class="story-section">
+                                <div class="story-header">
+                                    <span class="story-icon">📜</span>
+                                    <span class="story-title">軍團傳說</span>
+                                </div>
+                                <div class="story-content">
+                                    <p class="story-text" id="growthStory">神秘力量匯聚，命運之輪轉動...</p>
+                                </div>
+                            </div>
+
+                            <!-- 一句話建議 -->
+                            <div class="advice-section">
+                                <div class="advice-content">
+                                    <span class="advice-icon">💡</span>
+                                    <p class="advice-text" id="growthAdvice">見證時光變遷的智慧軍團</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 本我兵團 (日柱) -->
+                    <div class="army-card" data-army="self" data-color="blue-purple">
+                        <div class="army-header">
+                            <div class="army-title">
+                                <h3 class="army-name">本我兵團</h3>
+                                <span class="army-pillar">日柱</span>
+                            </div>
+                            <div class="army-element" id="selfElement">--</div>
+                        </div>
+                        
+                        <div class="army-content">
+                            <!-- 主將 -->
+                            <div class="role-section">
+                                <div class="role-header">
+                                    <span class="role-icon">👑</span>
+                                    <span class="role-title">主將</span>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name" id="selfGeneral">--</span>
+                                    <span class="role-desc">統領全軍，決定戰略方向</span>
+                                </div>
+                            </div>
+
+                            <!-- 軍師 -->
+                            <div class="role-section">
+                                <div class="role-header">
+                                    <span class="role-icon">🧙</span>
+                                    <span class="role-title">軍師</span>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name" id="selfAdvisor">--</span>
+                                    <span class="role-desc">智謀策劃，輔助決策</span>
+                                </div>
+                            </div>
+
+                            <!-- 副將 -->
+                            <div class="role-section">
+                                <div class="role-header">
+                                    <span class="role-icon">⚔️</span>
+                                    <span class="role-title">副將</span>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name" id="selfViceGeneral">--</span>
+                                    <span class="role-desc">支援力量，執行戰術</span>
+                                </div>
+                            </div>
+
+                            <!-- 奇謀 -->
+                            <div class="role-section">
+                                <div class="role-header">
+                                    <span class="role-icon">🎭</span>
+                                    <span class="role-title">奇謀</span>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name" id="selfStrategist">--</span>
+                                    <span class="role-desc">潛在能力，特殊戰法</span>
+                                </div>
+                            </div>
+
+                            <!-- 納音戰場 -->
+                            <div class="battlefield-section">
+                                <div class="battlefield-header">
+                                    <span class="battlefield-icon">🏟️</span>
+                                    <span class="battlefield-title">納音戰場</span>
+                                </div>
+                                <div class="battlefield-info">
+                                    <span class="battlefield-name" id="selfBattlefield">--</span>
+                                </div>
+                            </div>
+
+                            <!-- 神煞兵符 -->
+                            <div class="symbols-section">
+                                <div class="symbols-header">
+                                    <span class="symbols-icon">🎖️</span>
+                                    <span class="symbols-title">神煞兵符</span>
+                                </div>
+                                <div class="symbols-list" id="selfSymbols">
+                                    <!-- 動態生成 -->
+                                </div>
+                            </div>
+
+                            <!-- AI軍團故事 -->
+                            <div class="story-section">
+                                <div class="story-header">
+                                    <span class="story-icon">📜</span>
+                                    <span class="story-title">軍團傳說</span>
+                                </div>
+                                <div class="story-content">
+                                    <p class="story-text" id="selfStory">神秘力量匯聚，命運之輪轉動...</p>
+                                </div>
+                            </div>
+
+                            <!-- 一句話建議 -->
+                            <div class="advice-section">
+                                <div class="advice-content">
+                                    <span class="advice-icon">💡</span>
+                                    <p class="advice-text" id="selfAdvice">展現內在真實力量的精銳</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 未來兵團 (時柱) -->
+                    <div class="army-card" data-army="future" data-color="orange-red">
+                        <div class="army-header">
+                            <div class="army-title">
+                                <h3 class="army-name">未來兵團</h3>
+                                <span class="army-pillar">時柱</span>
+                            </div>
+                            <div class="army-element" id="futureElement">--</div>
+                        </div>
+                        
+                        <div class="army-content">
+                            <!-- 主將 -->
+                            <div class="role-section">
+                                <div class="role-header">
+                                    <span class="role-icon">👑</span>
+                                    <span class="role-title">主將</span>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name" id="futureGeneral">--</span>
+                                    <span class="role-desc">統領全軍，決定戰略方向</span>
+                                </div>
+                            </div>
+
+                            <!-- 軍師 -->
+                            <div class="role-section">
+                                <div class="role-header">
+                                    <span class="role-icon">🧙</span>
+                                    <span class="role-title">軍師</span>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name" id="futureAdvisor">--</span>
+                                    <span class="role-desc">智謀策劃，輔助決策</span>
+                                </div>
+                            </div>
+
+                            <!-- 副將 -->
+                            <div class="role-section">
+                                <div class="role-header">
+                                    <span class="role-icon">⚔️</span>
+                                    <span class="role-title">副將</span>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name" id="futureViceGeneral">--</span>
+                                    <span class="role-desc">支援力量，執行戰術</span>
+                                </div>
+                            </div>
+
+                            <!-- 奇謀 -->
+                            <div class="role-section">
+                                <div class="role-header">
+                                    <span class="role-icon">🎭</span>
+                                    <span class="role-title">奇謀</span>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name" id="futureStrategist">--</span>
+                                    <span class="role-desc">潛在能力，特殊戰法</span>
+                                </div>
+                            </div>
+
+                            <!-- 納音戰場 -->
+                            <div class="battlefield-section">
+                                <div class="battlefield-header">
+                                    <span class="battlefield-icon">🏟️</span>
+                                    <span class="battlefield-title">納音戰場</span>
+                                </div>
+                                <div class="battlefield-info">
+                                    <span class="battlefield-name" id="futureBattlefield">--</span>
+                                </div>
+                            </div>
+
+                            <!-- 神煞兵符 -->
+                            <div class="symbols-section">
+                                <div class="symbols-header">
+                                    <span class="symbols-icon">🎖️</span>
+                                    <span class="symbols-title">神煞兵符</span>
+                                </div>
+                                <div class="symbols-list" id="futureSymbols">
+                                    <!-- 動態生成 -->
+                                </div>
+                            </div>
+
+                            <!-- AI軍團故事 -->
+                            <div class="story-section">
+                                <div class="story-header">
+                                    <span class="story-icon">📜</span>
+                                    <span class="story-title">軍團傳說</span>
+                                </div>
+                                <div class="story-content">
+                                    <p class="story-text" id="futureStory">神秘力量匯聚，命運之輪轉動...</p>
+                                </div>
+                            </div>
+
+                            <!-- 一句話建議 -->
+                            <div class="advice-section">
+                                <div class="advice-content">
+                                    <span class="advice-icon">💡</span>
+                                    <p class="advice-text" id="futureAdvice">指引前進方向的先鋒部隊</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 載入動畫 -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3 class="loading-title">命運啟動中...</h3>
+            <p class="loading-text">正在召喚四時軍團</p>
+        </div>
+    </div>
+
+    <!-- 錯誤提示 -->
+    <div id="error-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3 class="modal-title">系統提示</h3>
+            <p class="modal-message" id="error-message">發生錯誤</p>
+            <button class="modal-btn" id="close-error">確定</button>
+        </div>
+    </div>
+
+    <script src="army-effects.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
