@@ -412,6 +412,7 @@ class BaziApp {
         this.armyEffects = new ArmyEffects();
         this.currentPage = 'input';
         this.baziResult = null;
+        this.isCalculating = false;
         
         this.initializeElements();
         this.bindEvents();
@@ -482,7 +483,8 @@ class BaziApp {
         this.currentPage = pageId;
         
         // 如果切換到八字排盤或軍團頁面但沒有計算結果，自動切回輸入頁
-        if ((pageId === 'bazi' || pageId === 'army') && !this.baziResult) {
+        // 但是如果是從計算過程中切換過來的，則不執行這個檢查
+        if ((pageId === 'bazi' || pageId === 'army') && !this.baziResult && !this.isCalculating) {
             setTimeout(() => {
                 this.showError('請先輸入出生資訊並計算八字命盤');
                 this.switchPage('input');
@@ -495,6 +497,7 @@ class BaziApp {
         e.preventDefault();
         
         try {
+            this.isCalculating = true;
             this.showLoading();
             
             const formData = new FormData(this.form);
@@ -541,6 +544,7 @@ class BaziApp {
             console.error('計算錯誤:', error);
             this.showError(error.message);
         } finally {
+            this.isCalculating = false;
             this.hideLoading();
         }
     }
@@ -787,4 +791,5 @@ document.addEventListener('DOMContentLoaded', () => {
     new BaziApp();
     console.log('虹靈御所八字人生兵法系統已啟動');
 });
+
 
