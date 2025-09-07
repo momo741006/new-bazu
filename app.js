@@ -1,5 +1,4 @@
-﻿/* 🌈 虹靈御所 - 八字人生兵法 app.js (完整前端可用版) */
-
+/* 🌈 虹靈御所 - 八字人生兵法 app.js (GitHub融合修正版) */
 
 /* === 常量與對照 === */
 const TIAN_GAN = ["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
@@ -8,7 +7,6 @@ const WU_XING_GAN = { "甲":"木","乙":"木","丙":"火","丁":"火","戊":"土
 const WU_XING_ZHI = { "子":"水","丑":"土","寅":"木","卯":"木","辰":"土","巳":"火","午":"火","未":"土","申":"金","酉":"金","戌":"土","亥":"水" };
 const YIN_YANG_GAN = { "甲":"陽","乙":"陰","丙":"陽","丁":"陰","戊":"陽","己":"陰","庚":"陽","辛":"陰","壬":"陽","癸":"陰" };
 const YIN_YANG_ZHI = { "子":"陽","丑":"陰","寅":"陽","卯":"陰","辰":"陽","巳":"陰","午":"陽","未":"陰","申":"陽","酉":"陰","戌":"陽","亥":"陰" };
-
 
 /* 五虎遁月（年干→寅月起干），月支序 */
 const MONTH_GAN_MAP = {
@@ -24,7 +22,6 @@ const MONTH_GAN_MAP = {
   '癸': ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸','甲','乙']
 };
 
-
 /* 五鼠遁時 */
 const HOUR_TO_ZHI_MAP = {
   23:"子",0:"子",1:"丑",2:"丑",3:"寅",4:"寅",5:"卯",6:"卯",7:"辰",8:"辰",9:"巳",10:"巳",
@@ -32,8 +29,7 @@ const HOUR_TO_ZHI_MAP = {
 };
 const WU_SHU_DUN_SHI_MAP = { "甲":"甲","己":"甲","乙":"丙","庚":"丙","丙":"戊","辛":"戊","丁":"庚","壬":"庚","戊":"壬","癸":"壬" };
 
-
-/* 藏干與權重（簡化可用） */
+/* 藏干與權重 */
 const CANG_GAN = {
   "子":[{g:"癸",w:1.0}],
   "丑":[{g:"己",w:0.6},{g:"癸",w:0.3},{g:"辛",w:0.3}],
@@ -49,21 +45,19 @@ const CANG_GAN = {
   "亥":[{g:"壬",w:0.6},{g:"甲",w:0.4}]
 };
 
-
 /* 60 甲子納音（最小表） */
 const NAYIN = {
-"甲子":"海中金","乙丑":"海中金","丙寅":"爐中火","丁卯":"爐中火","戊辰":"大林木","己巳":"大林木",
-"庚午":"路旁土","辛未":"路旁土","壬申":"劍鋒金","癸酉":"劍鋒金","甲戌":"山頭火","乙亥":"山頭火",
-"丙子":"澗下水","丁丑":"澗下水","戊寅":"城頭土","己卯":"城頭土","庚辰":"白蠟金","辛巳":"白蠟金",
-"壬午":"楊柳木","癸未":"楊柳木","甲申":"泉中水","乙酉":"泉中水","丙戌":"屋上土","丁亥":"屋上土",
-"戊子":"霹靂火","己丑":"霹靂火","庚寅":"松柏木","辛卯":"松柏木","壬辰":"長流水","癸巳":"長流水",
-"甲午":"沙中金","乙未":"沙中金","丙申":"山下火","丁酉":"山下火","戊戌":"平地木","己亥":"平地木",
-"庚子":"壁上土","辛丑":"壁上土","壬寅":"金箔金","癸卯":"金箔金","甲辰":"覆燈火","乙巳":"覆燈火",
-"丙午":"天河水","丁未":"天河水","戊申":"大驛土","己酉":"大驛土","庚戌":"釵釧金","辛亥":"釵釧金",
-"壬子":"桑柘木","癸丑":"桑柘木","甲寅":"大溪水","乙卯":"大溪水","丙辰":"沙中土","丁巳":"沙中土",
-"戊午":"天上火","己未":"天上火","庚申":"石榴木","辛酉":"石榴木","壬戌":"大海水","癸亥":"大海水"
+  "甲子":"海中金","乙丑":"海中金","丙寅":"爐中火","丁卯":"爐中火","戊辰":"大林木","己巳":"大林木",
+  "庚午":"路旁土","辛未":"路旁土","壬申":"劍鋒金","癸酉":"劍鋒金","甲戌":"山頭火","乙亥":"山頭火",
+  "丙子":"澗下水","丁丑":"澗下水","戊寅":"城頭土","己卯":"城頭土","庚辰":"白蠟金","辛巳":"白蠟金",
+  "壬午":"楊柳木","癸未":"楊柳木","甲申":"泉中水","乙酉":"泉中水","丙戌":"屋上土","丁亥":"屋上土",
+  "戊子":"霹靂火","己丑":"霹靂火","庚寅":"松柏木","辛卯":"松柏木","壬辰":"長流水","癸巳":"長流水",
+  "甲午":"沙中金","乙未":"沙中金","丙申":"山下火","丁酉":"山下火","戊戌":"平地木","己亥":"平地木",
+  "庚子":"壁上土","辛丑":"壁上土","壬寅":"金箔金","癸卯":"金箔金","甲辰":"覆燈火","乙巳":"覆燈火",
+  "丙午":"天河水","丁未":"天河水","戊申":"大驛土","己酉":"大驛土","庚戌":"釵釧金","辛亥":"釵釧金",
+  "壬子":"桑柘木","癸丑":"桑柘木","甲寅":"大溪水","乙卯":"大溪水","丙辰":"沙中土","丁巳":"沙中土",
+  "戊午":"天上火","己未":"天上火","庚申":"石榴木","辛酉":"石榴木","壬戌":"大海水","癸亥":"大海水"
 };
-
 
 /* 角色名（可擴充） */
 const GAN_ROLE = {
@@ -75,13 +69,11 @@ const ZHI_ROLE = {
   "午":"烈馬騎兵","未":"溫羊牧者","申":"靈猴戰士","酉":"金雞衛士","戌":"戰犬統領","亥":"海豚智者"
 };
 
-
 /* === 工具 === */
 function setText(id, txt){ const el=document.getElementById(id); if (el) el.textContent = txt; }
 function fmtPillars(ps){ return `${ps.year.pillar} ${ps.month.pillar} ${ps.day.pillar} ${ps.hour.pillar}`; }
 
-
-/* 節氣分月（近似足夠準確） */
+/* 節氣分月（近似足夠） */
 function monthZhiBySolarTerm(y,m,d){
   const dt = new Date(y, m-1, d);
   const stamp = (mm,dd)=> new Date(y,mm-1,dd);
@@ -103,11 +95,9 @@ function monthZhiBySolarTerm(y,m,d){
   for (let i=0;i<map.length;i++){ if (dt >= map[i].date) last = map[i]; }
   return last.zhi;
 }
-
-
 /* === 四柱計算 === */
 function calculateYearPillar(year, month, day) {
-  const lichun = new Date(year,1,4); // 2/4（近似）
+  const lichun = new Date(year,1,4); // 2/4
   const d = new Date(year,month-1,day);
   const actualYear = d >= lichun ? year : year - 1;
   const gan = TIAN_GAN[(actualYear - 4) % 10];
@@ -136,7 +126,9 @@ function calculateHourPillar(hour, dayGan) {
   const zhiIdx = DI_ZHI.indexOf(zhi);
   const gan = TIAN_GAN[(baseIdx+zhiIdx)%10];
   return {gan,zhi,pillar:gan+zhi};
-}/* === 十神 === */
+}
+
+/* === 十神 === */
 function sheng(a,b){ return (a==="木"&&b==="火")||(a==="火"&&b==="土")||(a==="土"&&b==="金")||(a==="金"&&b==="水")||(a==="水"&&b==="木"); }
 function ke(a,b){ return (a==="木"&&b==="土")||(a==="土"&&b==="水")||(a==="水"&&b==="火")||(a==="火"&&b==="金")||(a==="金"&&b==="木"); }
 function getTenGod(dayGan, otherGan) {
@@ -150,7 +142,6 @@ function getTenGod(dayGan, otherGan) {
   return "未知";
 }
 function calculateTenGods(dayGan, otherGans){ return otherGans.map(g=>`${g}:${getTenGod(dayGan,g)}`); }
-
 
 /* === 神煞（天乙/桃花/驛馬） === */
 function shensha_tianyiguiren(dayGan){
@@ -177,7 +168,6 @@ function calculateShensha(p){
   return list.length ? list : ["（本盤暫無核心神煞）"];
 }
 
-
 /* === 五行統計 === */
 function calcFiveElementPower(p){
   const t = {木:0,火:0,土:0,金:0,水:0};
@@ -196,8 +186,6 @@ function calcYinYangCount(p){
   });
   return {陰:yin,陽:yang};
 }
-
-
 /* === 主流程 === */
 async function generateBazi({yyyy,mm,dd,hh}){
   const yearP = calculateYearPillar(yyyy,mm,dd);
@@ -206,9 +194,9 @@ async function generateBazi({yyyy,mm,dd,hh}){
   const hourP = calculateHourPillar(hh,dayP.gan);
   return { pillars:{year:yearP,month:monthP,day:dayP,hour:hourP}, bazi: fmtPillars({year:yearP,month:monthP,day:dayP,hour:hourP}) };
 }
-/* === 軍團卡 + 故事 === */
+
+/* === 軍團卡 + 故事（含 fallback） === */
 async function fetchStory(prompt){
-  // 2 秒超時 + fallback，API 不存在也不會卡
   const controller = new AbortController();
   const to = setTimeout(()=>controller.abort(), 2000);
   try{
@@ -238,7 +226,7 @@ function renderArmyCard(targetId, label, gan, zhi){
       <div class="army-story" id="${targetId}-story">生成中…</div>
       <button class="story-toggle-btn" data-target="${targetId}-story">展開/收合</button>
     </div>`;
-  el.querySelector(".story-toggle-btn").addEventListener("click", (e)=>{
+  el.querySelector(".story-toggle-btn").addEventListener("click",(e)=>{
     const sid = e.currentTarget.getAttribute("data-target");
     const sEl = document.getElementById(sid);
     sEl.classList.toggle("expanded");
@@ -249,8 +237,6 @@ async function fillArmyCards(p){
   renderArmyCard("army-month","成長", p.month.gan, p.month.zhi);
   renderArmyCard("army-day","本我", p.day.gan, p.day.zhi);
   renderArmyCard("army-hour","未來", p.hour.gan, p.hour.zhi);
-
-
   const prompts = {
     year:`請用RPG敘事，描寫以「${GAN_ROLE[p.year.gan]||p.year.gan}」為主將、「${ZHI_ROLE[p.year.zhi]||p.year.zhi}」為軍師的家族軍團，100~150字，中文。`,
     month:`請用RPG敘事，描寫以「${GAN_ROLE[p.month.gan]||p.month.gan}」為主將、「${ZHI_ROLE[p.month.zhi]||p.month.zhi}」為軍師的成長軍團，100~150字，中文。`,
@@ -265,22 +251,17 @@ async function fillArmyCards(p){
   setText("army-day-story", sD);  setText("army-hour-story", sH);
 }
 
-
 /* === 圖表 === */
 let yinYangChart=null, wuxingChart=null;
 function renderAnalysisCharts(p){
   const yinYang = calcYinYangCount(p);
   const wuxing = calcFiveElementPower(p);
-
-
   const yyCtx = document.getElementById("yin-yang-chart").getContext("2d");
   if (yinYangChart) yinYangChart.destroy();
   yinYangChart = new Chart(yyCtx,{ type:"bar",
     data:{ labels:["陰","陽"], datasets:[{label:"陰陽平衡", data:[yinYang.陰, yinYang.陽]}] },
     options:{ responsive:true, plugins:{legend:{display:false}} }
   });
-
-
   const wxCtx = document.getElementById("wuxing-chart").getContext("2d");
   if (wuxingChart) wuxingChart.destroy();
   const labels=["木","火","土","金","水"]; const data=labels.map(k=>wuxing[k]);
@@ -288,22 +269,27 @@ function renderAnalysisCharts(p){
     data:{ labels, datasets:[{ label:"五行力量", data }] },
     options:{ responsive:true, scales:{ r:{ beginAtZero:true } } }
   });
-
-
   setText("analysis-career", `事業：土 ${wuxing.土.toFixed(1)}（穩定度）`);
   setText("analysis-love",   `愛情：木 ${wuxing.木.toFixed(1)}（成長/包容） 火 ${wuxing.火.toFixed(1)}（表達）`);
   setText("analysis-money",  `財運：金 ${wuxing.金.toFixed(1)}（資源/效率）`);
   setText("analysis-mind",   `心理：水 ${wuxing.水.toFixed(1)}（思考/彈性）`);
 }
-
-
-/* === 表單處理 === */
+/* === 表單：初始化 + 讀取（使用 <select>；相容舊欄位） === */
 function getDaysInMonth(y,m){ return new Date(y, m, 0).getDate(); }
 function fillRange(sel, start, end, pad=false){
   sel.innerHTML = ""; for(let v=start; v<=end; v++){ const o=document.createElement("option");
-    o.value=String(v); o.textContent=pad?String(v).padStart(2,"0"):String(v); sel.appendChild(o); }
+    o.value=String(v); o.textContent= pad?String(v).padStart(2,"0"):String(v); sel.appendChild(o); }
 }
 function readBirthFromForm(){
+  // 向下相容：若有人仍放 date/time
+  const dateInput=document.getElementById("birth-date");
+  const timeInput=document.getElementById("birth-time");
+  if (dateInput && timeInput && dateInput.value && timeInput.value){
+    const [yyyy,mm,dd]=dateInput.value.split("-").map(Number);
+    const [hh,minute]=timeInput.value.split(":").map(Number);
+    return { yyyy,mm,dd,hh,minute,zMode:"none" };
+  }
+  // 新版下拉
   const ySel = document.getElementById("year-select");
   const moSel= document.getElementById("month-select");
   const dSel = document.getElementById("day-select");
@@ -311,170 +297,133 @@ function readBirthFromForm(){
   const miSel= document.getElementById("minute-select");
   const zSel = document.getElementById("zishi-mode");
   if (!ySel||!moSel||!dSel||!hSel||!miSel) throw new Error("表單欄位缺失");
-  const yyyy=Number(ySel.value), mm=Number(moSel.value), dd=Number(dSel.value);
-  const hh=Number(hSel.value), minute=Number(miSel.value);
-  const zMode = zSel?.value || "late";
-  return { yyyy, mm, dd, hh, minute, zMode };
+  return {
+    yyyy:Number(ySel.value), mm:Number(moSel.value), dd:Number(dSel.value),
+    hh:Number(hSel.value),  minute:Number(miSel.value),
+    zMode: zSel?.value || "late"
+  };
 }
+// 子時換日（none/late/full），僅影響年/月/日柱日期
 function adjustDateForZiMode({y,m,d,hh}, mode){
   let addNext=false;
-  if (mode==="late"){ if (hh===23) addNext=true; }       // 晚子：23:00→次日
-  else if (mode==="full"){ if (hh===23||hh===0) addNext=true; } // 整個子時：23:00–00:59→次日
-  if (!addNext) return { y,m,d,hh };
+  if (mode==="late"){ if (hh===23) addNext=true; }             // 晚子：23→次日
+  else if (mode==="full"){ if (hh===23||hh===0) addNext=true; } // 整個子時：23~00→次日
+  if (!addNext) return {y,m,d,hh};
   const dt=new Date(y,m-1,d); dt.setDate(dt.getDate()+1);
   return { y:dt.getFullYear(), m:dt.getMonth()+1, d:dt.getDate(), hh };
-}/* === 啟動 === */
+}
+
+/* === 啟動 === */
 document.addEventListener("DOMContentLoaded", ()=>{
-  // 1) 初始化下拉
-  const ySel = document.getElementById("year-select");
-  const moSel= document.getElementById("month-select");
-  const dSel = document.getElementById("day-select");
-  const hSel = document.getElementById("hour-select");
-  const miSel= document.getElementById("minute-select");
-  const zSel = document.getElementById("zishi-mode");
+  // 初始化下拉
+  const ySel=document.getElementById("year-select");
+  const moSel=document.getElementById("month-select");
+  const dSel=document.getElementById("day-select");
+  const hSel=document.getElementById("hour-select");
+  const miSel=document.getElementById("minute-select");
+  const zSel=document.getElementById("zishi-mode");
+  if (ySel && moSel && dSel && hSel && miSel){
+    fillRange(ySel,1900,2100,false);
+    fillRange(moSel,1,12,true);
+    fillRange(hSel,0,23,true);
+    fillRange(miSel,0,59,true);
+    const now=new Date();
+    ySel.value=now.getFullYear();
+    moSel.value=String(now.getMonth()+1);
+    const resetDays=()=>fillRange(dSel,1,getDaysInMonth(Number(ySel.value),Number(moSel.value)),true);
+    ySel.addEventListener("change",resetDays);
+    moSel.addEventListener("change",resetDays);
+    resetDays();
+    dSel.value=String(now.getDate()).padStart(2,"0");
+    hSel.value=String(now.getHours()).padStart(2,"0");
+    miSel.value=String(now.getMinutes()).padStart(2,"0");
+    // 預設「晚子」，並記住選擇
+    const saved=localStorage.getItem("zishi-mode");
+    zSel.value=(saved==="none"||saved==="late"||saved==="full")?saved:"late";
+    zSel.addEventListener("change",()=>localStorage.setItem("zishi-mode",zSel.value));
+  }
 
-
-  // 年 1900-2100
-  fillRange(ySel, 1900, 2100, false);
-  // 月 1-12
-  fillRange(moSel, 1, 12, true);
-  // 時 0-23
-  fillRange(hSel, 0, 23, true);
-  // 分 0-59
-  fillRange(miSel, 0, 59, true);
-
-
-  // 預設：今天（或你要的測試值）
-  const now=new Date();
-  ySel.value = now.getFullYear();
-  moSel.value = String(now.getMonth()+1);
-  const resetDays = ()=>{ fillRange(dSel, 1, getDaysInMonth(Number(ySel.value), Number(moSel.value)), true); };
-  ySel.addEventListener("change", resetDays);
-  moSel.addEventListener("change", resetDays);
-  resetDays();
-  dSel.value = String(now.getDate()).padStart(2,"0");
-  hSel.value = String(now.getHours()).padStart(2,"0");
-  miSel.value= String(now.getMinutes()).padStart(2,"0");
-
-
-  // 預設「晚子」，並記住選擇
-  const saved = localStorage.getItem("zishi-mode");
-  zSel.value = (saved==="none"||saved==="late"||saved==="full") ? saved : "late";
-  zSel.addEventListener("change", ()=>localStorage.setItem("zishi-mode", zSel.value));
-
-
-  // 2) Submit
-  const form = document.getElementById("input-form");
+  // 表單送出（改為讀 <select>；相容舊欄位）
+  const form=document.getElementById("input-form");
+  if (!form) return;
   form.addEventListener("submit", async (e)=>{
     e.preventDefault();
     try{
-      const birth = readBirthFromForm();
-      const adj = adjustDateForZiMode({y:birth.yyyy,m:birth.mm,d:birth.dd,hh:birth.hh}, birth.zMode);
+      const birth=readBirthFromForm();
+      const adj=adjustDateForZiMode({y:birth.yyyy,m:birth.mm,d:birth.dd,hh:birth.hh}, birth.zMode);
 
+      const result=await generateBazi({ yyyy:adj.y, mm:adj.m, dd:adj.d, hh:birth.hh, minute:birth.minute });
 
-      // 計算
-      const result = await generateBazi({ yyyy:adj.y, mm:adj.m, dd:adj.d, hh:birth.hh, minute:birth.minute });
-
-
-      // 四柱
-      setText("bazi-pillars", "四柱：" + fmtPillars(result.pillars));
-      // 十神
-      const tenGods = calculateTenGods(result.pillars.day.gan, [result.pillars.year.gan,result.pillars.month.gan,result.pillars.hour.gan]);
+      setText("bazi-pillars","四柱："+fmtPillars(result.pillars));
+      const tenGods=calculateTenGods(result.pillars.day.gan,[result.pillars.year.gan,result.pillars.month.gan,result.pillars.hour.gan]);
       setText("bazi-tengods","十神："+tenGods.join("，"));
-      // 納音
       const nY=NAYIN[result.pillars.year.pillar]||"未知";
       const nM=NAYIN[result.pillars.month.pillar]||"未知";
       const nD=NAYIN[result.pillars.day.pillar]||"未知";
       const nH=NAYIN[result.pillars.hour.pillar]||"未知";
       setText("bazi-nayin",`納音：年(${nY}) 月(${nM}) 日(${nD}) 時(${nH})`);
-      // 神煞
-      const sh = calculateShensha(result.pillars);
+      const sh=calculateShensha(result.pillars);
       setText("bazi-shensha","神煞："+(sh?.length?sh.join("，"):"—"));
 
-
-      // 軍團 + 故事
       await fillArmyCards(result.pillars);
-
-
-      // 圖表
       renderAnalysisCharts(result.pillars);
 
-
-      // 標注本次子時模式
       const modeLabel = birth.zMode==="late"?"晚子換日":birth.zMode==="full"?"整個子時換日":"不換日";
-      const pe = document.getElementById("bazi-pillars");
-      if (pe) pe.textContent = pe.textContent.replace(/^四柱：/, `四柱（${modeLabel}）：`);
+      const pe=document.getElementById("bazi-pillars");
+      if (pe) pe.textContent = pe.textContent.replace(/^四柱：/,'四柱（'+modeLabel+'）：');
 
-
-      // 切頁
       if (typeof switchPageSafe==="function") switchPageSafe("bazi");
       window.scrollTo({top:0,behavior:"smooth"});
-
-
     }catch(err){
       console.error(err);
       alert("計算失敗："+(err.message||err));
     }
   });
-
-});
-/* ====== 粒子背景（#particles-bg） ====== */
+});/* ====== 粒子背景（#particles-bg） ====== */
 (function initParticles(){
-  const host = document.getElementById('particles-bg');
-  if (!host) return;
+  const host = document.getElementById('particles-bg'); if (!host) return;
   const cvs = document.createElement('canvas'); host.appendChild(cvs);
   const ctx = cvs.getContext('2d');
   const DPR = Math.max(1, Math.min(2, window.devicePixelRatio||1));
   let W,H,pts;
-
-  function resize(){ W = cvs.width = innerWidth*DPR; H = cvs.height = innerHeight*DPR; cvs.style.width = innerWidth+'px'; cvs.style.height = innerHeight+'px';
-    // 依螢幕大小動態生成點數
-    const count = Math.round((innerWidth*innerHeight)/16000);
-    pts = new Array(count).fill(0).map(()=>({
-      x: Math.random()*W, y: Math.random()*H,
+  function resize(){
+    W=cvs.width=innerWidth*DPR; H=cvs.height=innerHeight*DPR;
+    cvs.style.width=innerWidth+'px'; cvs.style.height=innerHeight+'px';
+    const count=Math.round((innerWidth*innerHeight)/16000);
+    pts=new Array(count).fill(0).map(()=>({
+      x:Math.random()*W,y:Math.random()*H,
       vx:(Math.random()-.5)*0.25*DPR, vy:(Math.random()-.5)*0.25*DPR,
-      r: Math.random()*1.2*DPR + .3*DPR, a: Math.random()*0.6 + 0.2
+      r:Math.random()*1.2*DPR + .3*DPR, a:Math.random()*0.6 + 0.2
     }));
   }
-  window.addEventListener('resize', resize); resize();
-
-  function tick(){
-    ctx.clearRect(0,0,W,H);
-    ctx.globalCompositeOperation = 'lighter';
+  window.addEventListener('resize',resize); resize();
+  (function tick(){
+    ctx.clearRect(0,0,W,H); ctx.globalCompositeOperation='lighter';
     for(const p of pts){
-      p.x += p.vx; p.y += p.vy;
+      p.x+=p.vx; p.y+=p.vy;
       if (p.x<0||p.x>W) p.vx*=-1; if (p.y<0||p.y>H) p.vy*=-1;
       ctx.beginPath();
-      const c1 = 'rgba(0,230,255,'+p.a+')', c2='rgba(124,92,255,'+p.a+')';
-      const g = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*6); g.addColorStop(0,c1); g.addColorStop(1,c2);
-      ctx.fillStyle = g; ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+      const c1='rgba(0,230,255,'+p.a+')', c2='rgba(124,92,255,'+p.a+')';
+      const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*6); g.addColorStop(0,c1); g.addColorStop(1,c2);
+      ctx.fillStyle=g; ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
     }
     requestAnimationFrame(tick);
-  }
-  tick();
+  })();
 })();
 
-/* ====== 打字機效果 ====== */
+/* ====== 打字機效果 + 卡片進場（包覆 fillArmyCards） ====== */
 function typewriterEffect(el, fullText, speed=18){
-  if(!el) return; el.textContent = '';
-  const arr = Array.from(fullText); let i=0;
-  function step(){ if(i<=arr.length){ el.textContent = arr.slice(0,i++).join(''); requestAnimationFrame(step) } }
-  step();
+  if(!el) return; el.textContent='';
+  const arr=Array.from(fullText); let i=0;
+  (function step(){ if(i<=arr.length){ el.textContent=arr.slice(0,i++).join(''); requestAnimationFrame(step) } })();
 }
-
-/* ====== 將故事改為打字呈現 + 卡片進場 ====== */
-const _fillArmyCards = fillArmyCards; // 保留原函式參考
+const _fillArmyCards = fillArmyCards;
 fillArmyCards = async function(pillars){
-  // 1) 容器加上 reveal-stagger 讓卡片進場有延遲
-  const wrap = document.querySelector('.army-container');
-  if (wrap) wrap.classList.add('reveal-stagger');
-
-  // 2) 呼叫原有流程（會先建立四張卡）
+  const wrap=document.querySelector('.army-container'); if (wrap) wrap.classList.add('reveal-stagger');
   await _fillArmyCards(pillars);
-
-  // 3) 對每張卡的故事走打字機
   ['year','month','day','hour'].forEach((k, idx)=>{
-    const el = document.getElementById(`army-${k}-story`);
+    const el=document.getElementById(`army-${k}-story`);
     if(el){ setTimeout(()=> typewriterEffect(el, el.textContent, 20), 180 + idx*140); }
   });
 };
+
