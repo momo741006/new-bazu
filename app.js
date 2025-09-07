@@ -256,23 +256,68 @@ let yinYangChart=null, wuxingChart=null;
 function renderAnalysisCharts(p){
   const yinYang = calcYinYangCount(p);
   const wuxing = calcFiveElementPower(p);
-  const yyCtx = document.getElementById("yin-yang-chart").getContext("2d");
-  if (yinYangChart) yinYangChart.destroy();
-  yinYangChart = new Chart(yyCtx,{ type:"bar",
-    data:{ labels:["陰","陽"], datasets:[{label:"陰陽平衡", data:[yinYang.陰, yinYang.陽]}] },
-    options:{ responsive:true, plugins:{legend:{display:false}} }
-  });
-  const wxCtx = document.getElementById("wuxing-chart").getContext("2d");
-  if (wuxingChart) wuxingChart.destroy();
-  const labels=["木","火","土","金","水"]; const data=labels.map(k=>wuxing[k]);
-  wuxingChart = new Chart(wxCtx,{ type:"radar",
-    data:{ labels, datasets:[{ label:"五行力量", data }] },
-    options:{ responsive:true, scales:{ r:{ beginAtZero:true } } }
-  });
+  
+  // 檢查 Chart.js 是否可用
+  if (typeof Chart !== 'undefined') {
+    try {
+      const yyCtx = document.getElementById("yin-yang-chart").getContext("2d");
+      if (yinYangChart) yinYangChart.destroy();
+      yinYangChart = new Chart(yyCtx,{ type:"bar",
+        data:{ labels:["陰","陽"], datasets:[{label:"陰陽平衡", data:[yinYang.陰, yinYang.陽]}] },
+        options:{ responsive:true, plugins:{legend:{display:false}} }
+      });
+      const wxCtx = document.getElementById("wuxing-chart").getContext("2d");
+      if (wuxingChart) wuxingChart.destroy();
+      const labels=["木","火","土","金","水"]; const data=labels.map(k=>wuxing[k]);
+      wuxingChart = new Chart(wxCtx,{ type:"radar",
+        data:{ labels, datasets:[{ label:"五行力量", data }] },
+        options:{ responsive:true, scales:{ r:{ beginAtZero:true } } }
+      });
+    } catch (err) {
+      console.warn('圖表渲染失敗，顯示文字資料:', err);
+      displayChartFallback(yinYang, wuxing);
+    }
+  } else {
+    console.warn('Chart.js 未載入，顯示文字資料');
+    displayChartFallback(yinYang, wuxing);
+  }
+  
   setText("analysis-career", `事業：土 ${wuxing.土.toFixed(1)}（穩定度）`);
   setText("analysis-love",   `愛情：木 ${wuxing.木.toFixed(1)}（成長/包容） 火 ${wuxing.火.toFixed(1)}（表達）`);
   setText("analysis-money",  `財運：金 ${wuxing.金.toFixed(1)}（資源/效率）`);
   setText("analysis-mind",   `心理：水 ${wuxing.水.toFixed(1)}（思考/彈性）`);
+}
+
+function displayChartFallback(yinYang, wuxing) {
+  // 陰陽平衡文字顯示
+  const yyCanvas = document.getElementById("yin-yang-chart");
+  if (yyCanvas) {
+    yyCanvas.style.display = 'none';
+    const fallbackDiv = document.createElement('div');
+    fallbackDiv.className = 'chart-fallback';
+    fallbackDiv.innerHTML = `
+      <h4>陰陽平衡</h4>
+      <p>陰: ${yinYang.陰} | 陽: ${yinYang.陽}</p>
+      <p>比例 - 陰: ${(yinYang.陰/(yinYang.陰+yinYang.陽)*100).toFixed(1)}% | 陽: ${(yinYang.陽/(yinYang.陰+yinYang.陽)*100).toFixed(1)}%</p>
+    `;
+    yyCanvas.parentNode.appendChild(fallbackDiv);
+  }
+  
+  // 五行雷達圖文字顯示
+  const wxCanvas = document.getElementById("wuxing-chart");
+  if (wxCanvas) {
+    wxCanvas.style.display = 'none';
+    const fallbackDiv = document.createElement('div');
+    fallbackDiv.className = 'chart-fallback';
+    const labels = ["木","火","土","金","水"];
+    let content = '<h4>五行力量分布</h4><ul>';
+    labels.forEach(label => {
+      content += `<li>${label}: ${wuxing[label].toFixed(1)}</li>`;
+    });
+    content += '</ul>';
+    fallbackDiv.innerHTML = content;
+    wxCanvas.parentNode.appendChild(fallbackDiv);
+  }
 }
 /* === 表單：初始化 + 讀取（使用 <select>；相容舊欄位） === */
 function getDaysInMonth(y,m){ return new Date(y, m, 0).getDate(); }
