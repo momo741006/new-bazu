@@ -416,4 +416,65 @@ document.addEventListener("DOMContentLoaded", ()=>{
       alert("計算失敗："+(err.message||err));
     }
   });
+
 });
+/* ====== 粒子背景（#particles-bg） ====== */
+(function initParticles(){
+  const host = document.getElementById('particles-bg');
+  if (!host) return;
+  const cvs = document.createElement('canvas'); host.appendChild(cvs);
+  const ctx = cvs.getContext('2d');
+  const DPR = Math.max(1, Math.min(2, window.devicePixelRatio||1));
+  let W,H,pts;
+
+  function resize(){ W = cvs.width = innerWidth*DPR; H = cvs.height = innerHeight*DPR; cvs.style.width = innerWidth+'px'; cvs.style.height = innerHeight+'px';
+    // 依螢幕大小動態生成點數
+    const count = Math.round((innerWidth*innerHeight)/16000);
+    pts = new Array(count).fill(0).map(()=>({
+      x: Math.random()*W, y: Math.random()*H,
+      vx:(Math.random()-.5)*0.25*DPR, vy:(Math.random()-.5)*0.25*DPR,
+      r: Math.random()*1.2*DPR + .3*DPR, a: Math.random()*0.6 + 0.2
+    }));
+  }
+  window.addEventListener('resize', resize); resize();
+
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    ctx.globalCompositeOperation = 'lighter';
+    for(const p of pts){
+      p.x += p.vx; p.y += p.vy;
+      if (p.x<0||p.x>W) p.vx*=-1; if (p.y<0||p.y>H) p.vy*=-1;
+      ctx.beginPath();
+      const c1 = 'rgba(0,230,255,'+p.a+')', c2='rgba(124,92,255,'+p.a+')';
+      const g = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*6); g.addColorStop(0,c1); g.addColorStop(1,c2);
+      ctx.fillStyle = g; ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+/* ====== 打字機效果 ====== */
+function typewriterEffect(el, fullText, speed=18){
+  if(!el) return; el.textContent = '';
+  const arr = Array.from(fullText); let i=0;
+  function step(){ if(i<=arr.length){ el.textContent = arr.slice(0,i++).join(''); requestAnimationFrame(step) } }
+  step();
+}
+
+/* ====== 將故事改為打字呈現 + 卡片進場 ====== */
+const _fillArmyCards = fillArmyCards; // 保留原函式參考
+fillArmyCards = async function(pillars){
+  // 1) 容器加上 reveal-stagger 讓卡片進場有延遲
+  const wrap = document.querySelector('.army-container');
+  if (wrap) wrap.classList.add('reveal-stagger');
+
+  // 2) 呼叫原有流程（會先建立四張卡）
+  await _fillArmyCards(pillars);
+
+  // 3) 對每張卡的故事走打字機
+  ['year','month','day','hour'].forEach((k, idx)=>{
+    const el = document.getElementById(`army-${k}-story`);
+    if(el){ setTimeout(()=> typewriterEffect(el, el.textContent, 20), 180 + idx*140); }
+  });
+};
