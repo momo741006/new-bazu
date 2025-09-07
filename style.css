@@ -66,52 +66,63 @@ canvas{width:100% !important;max-height:360px}
   .input-form{grid-template-columns:1fr}
   .army-container{grid-template-columns:1fr}
 }
-/* ====== 動效增强 ====== */
+/* ====== 粒子背景（#particles-bg） ====== */
+(function initParticles(){
+  const host = document.getElementById('particles-bg');
+  if (!host) return;
+  const cvs = document.createElement('canvas'); host.appendChild(cvs);
+  const ctx = cvs.getContext('2d');
+  const DPR = Math.max(1, Math.min(2, window.devicePixelRatio||1));
+  let W,H,pts;
 
-/* 霓虹脈衝 */
-@keyframes neonPulse { 
-  0%,100% { box-shadow: 0 0 10px rgba(0,230,255,.35), inset 0 0 10px rgba(0,230,255,.12) }
-  50%     { box-shadow: 0 0 18px rgba(0,230,255,.55), inset 0 0 14px rgba(0,230,255,.18) }
-}
-.nav-tab.active { animation: neonPulse 2.2s ease-in-out infinite }
+  function resize(){ W = cvs.width = innerWidth*DPR; H = cvs.height = innerHeight*DPR; cvs.style.width = innerWidth+'px'; cvs.style.height = innerHeight+'px';
+    // 依螢幕大小動態生成點數
+    const count = Math.round((innerWidth*innerHeight)/16000);
+    pts = new Array(count).fill(0).map(()=>({
+      x: Math.random()*W, y: Math.random()*H,
+      vx:(Math.random()-.5)*0.25*DPR, vy:(Math.random()-.5)*0.25*DPR,
+      r: Math.random()*1.2*DPR + .3*DPR, a: Math.random()*0.6 + 0.2
+    }));
+  }
+  window.addEventListener('resize', resize); resize();
 
-/* 頁面淡入上移 */
-@keyframes fadeUp { 
-  from { opacity:0; transform: translateY(12px) } 
-  to   { opacity:1; transform: translateY(0) } 
-}
-.page.active { animation: fadeUp .36s ease both }
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    ctx.globalCompositeOperation = 'lighter';
+    for(const p of pts){
+      p.x += p.vx; p.y += p.vy;
+      if (p.x<0||p.x>W) p.vx*=-1; if (p.y<0||p.y>H) p.vy*=-1;
+      ctx.beginPath();
+      const c1 = 'rgba(0,230,255,'+p.a+')', c2='rgba(124,92,255,'+p.a+')';
+      const g = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*6); g.addColorStop(0,c1); g.addColorStop(1,c2);
+      ctx.fillStyle = g; ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
 
-/* 卡片進場（父容器加 .reveal-stagger 後生效） */
-.reveal-stagger .army-card { 
-  opacity:0; transform: translateY(12px); 
-  animation: fadeUp .44s ease both 
+/* ====== 打字機效果 ====== */
+function typewriterEffect(el, fullText, speed=18){
+  if(!el) return; el.textContent = '';
+  const arr = Array.from(fullText); let i=0;
+  function step(){ if(i<=arr.length){ el.textContent = arr.slice(0,i++).join(''); requestAnimationFrame(step) } }
+  step();
 }
-.reveal-stagger .army-card:nth-child(1){ animation-delay:.08s }
-.reveal-stagger .army-card:nth-child(2){ animation-delay:.14s }
-.reveal-stagger .army-card:nth-child(3){ animation-delay:.20s }
-.reveal-stagger .army-card:nth-child(4){ animation-delay:.26s }
 
-/* 卡片霓虹描邊 */
-@keyframes glowBorder {
-  0%   { border-color: rgba(124,92,255,.25) }
-  50%  { border-color: rgba(0,230,255,.45) }
-  100% { border-color: rgba(124,92,255,.25) }
-}
-.army-card { animation: glowBorder 4s linear infinite }
+/* ====== 將故事改為打字呈現 + 卡片進場 ====== */
+const _fillArmyCards = fillArmyCards; // 保留原函式參考
+fillArmyCards = async function(pillars){
+  // 1) 容器加上 reveal-stagger 讓卡片進場有延遲
+  const wrap = document.querySelector('.army-container');
+  if (wrap) wrap.classList.add('reveal-stagger');
 
-/* 按鈕微互動 */
-.story-toggle-btn, .nav-tab {
-  position: relative; overflow: hidden;
-}
-.story-toggle-btn:after, .nav-tab:after{
-  content:""; position:absolute; left:50%; top:50%; width:0; height:0;
-  background: radial-gradient( rgba(255,255,255,.25), transparent 60%);
-  transform: translate(-50%,-50%); transition: width .35s ease, height .35s ease; pointer-events:none;
-}
-.story-toggle-btn:active:after, .nav-tab:active:after{ width:160px; height:160px }
+  // 2) 呼叫原有流程（會先建立四張卡）
+  await _fillArmyCards(pillars);
 
-/* 打字機容器更像光框 */
-.army-story{
-  border-image: linear-gradient(90deg, rgba(0,230,255,.45), rgba(124,92,255,.45)) 1;
-}
+  // 3) 對每張卡的故事走打字機
+  ['year','month','day','hour'].forEach((k, idx)=>{
+    const el = document.getElementById(`army-${k}-story`);
+    if(el){ setTimeout(()=> typewriterEffect(el, el.textContent, 20), 180 + idx*140); }
+  });
+};
