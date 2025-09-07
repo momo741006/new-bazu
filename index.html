@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🌈 虹靈御所八字人生兵法</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- 圖表 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div id="particles-bg"></div>
+
+  <!-- 導航 -->
+  <div class="nav-bar">
+    <div class="nav-logo"><h1>虹靈御所</h1></div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchPageSafe('input')">輸入</button>
+      <button class="nav-tab" onclick="switchPageSafe('bazi')">八字排盤</button>
+      <button class="nav-tab" onclick="switchPageSafe('army')">四時軍團</button>
+      <button class="nav-tab" onclick="switchPageSafe('analysis')">詳細分析</button>
+      <button class="nav-tab" onclick="switchPageSafe('wiki')">八字百科</button>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <!-- 頁 1：輸入 -->
+    <div id="page-input" class="page active">
+      <div class="page-header">
+        <h2 class="page-title">輸入出生資料</h2>
+      </div>
+
+      <div class="input-container">
+        <form id="input-form" class="input-form">
+          <div class="input-group">
+            <label class="input-label" for="name">姓名</label>
+            <input id="name" type="text" placeholder="選填" />
+          </div>
+
+          <div class="input-group">
+            <label class="input-label" for="birth-date">出生日期</label>
+            <input id="birth-date" type="date" required />
+          </div>
+
+          <div class="input-group">
+            <label class="input-label" for="birth-time">出生時間</label>
+            <input id="birth-time" type="time" required />
+          </div>
+
+          <button type="submit" class="nav-tab">生成命盤</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 頁 2：八字排盤 -->
+    <div id="page-bazi" class="page">
+      <div class="page-header">
+        <h2 class="page-title">八字排盤</h2>
+      </div>
+
+      <div id="bazi-result">
+        <p id="bazi-pillars">四柱：</p>
+        <p id="bazi-tengods">十神：</p>
+        <p id="bazi-nayin">納音：</p>
+        <p id="bazi-shensha">神煞：</p>
+      </div>
+    </div>
+
+    <!-- 頁 3：四時軍團 -->
+    <div id="page-army" class="page">
+      <div class="page-header">
+        <h2 class="page-title">四時軍團卡</h2>
+      </div>
+
+      <div class="army-container">
+        <div id="army-year" class="army-card"></div>
+        <div id="army-month" class="army-card"></div>
+        <div id="army-day" class="army-card"></div>
+        <div id="army-hour" class="army-card"></div>
+      </div>
+    </div>
+
+    <!-- 頁 4：詳細分析 -->
+    <div id="page-analysis" class="page">
+      <div class="page-header">
+        <h2 class="page-title">詳細分析</h2>
+      </div>
+
+      <div class="analysis-section">
+        <h3>陰陽平衡</h3>
+        <canvas id="yin-yang-chart"></canvas>
+      </div>
+
+      <div class="analysis-section">
+        <h3>五行雷達圖</h3>
+        <canvas id="wuxing-chart"></canvas>
+      </div>
+
+      <div class="analysis-section">
+        <h3>四領域影響</h3>
+        <ul>
+          <li id="analysis-career">事業運勢：</li>
+          <li id="analysis-love">愛情關係：</li>
+          <li id="analysis-money">金錢財運：</li>
+          <li id="analysis-mind">心理個性：</li>
+        </ul>
+      </div>
+    </div>
