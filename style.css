@@ -1,0 +1,233 @@
+﻿/* 🌈 虹靈御所 - 八字人生兵法 style.css (完整新版) */
+
+
+/* ===== 基礎設定 ===== */
+:root{
+  --bg-start:#0b1020;
+  --bg-end:#151a33;
+  --card:#1e2446;
+  --card-2:#1b213d;
+  --text:#eef3ff;
+  --muted:#92a0c0;
+  --neon:#00e6ff;
+  --neon-2:#7c5cff;
+  --accent:#ffbf3c;
+  --bad:#ff4d6d;
+  --good:#46e29a;
+  --border: rgba(255,255,255,.08);
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+
+*{ box-sizing: border-box; }
+html,body{
+  margin:0; padding:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  color: var(--text);
+  background: radial-gradient(1200px 1200px at 20% -10%, #101638 0%, #0b0f22 40%, #070915 70%) fixed,
+              linear-gradient(180deg, var(--bg-start), var(--bg-end)) fixed;
+  min-height:100vh;
+}
+
+
+/* ===== 粒子背景（保留占位） ===== */
+#particles-bg{ position: fixed; inset:0; z-index:-1; }
+
+
+/* ===== 導航列 ===== */
+.nav-bar{
+  position: sticky; top:0; z-index: 10;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 14px 22px;
+  background: rgba(10,13,28,.6);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo h1{
+  margin:0; font-size:20px; letter-spacing: .12em; color: #cfe3ff;
+}
+.nav-tabs{ display:flex; gap:10px; }
+.nav-tab{
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: .2s ease;
+}
+.nav-tab:hover{ border-color: rgba(255,255,255,.2); transform: translateY(-1px); }
+.nav-tab.active{
+  border-color: var(--neon);
+  box-shadow: 0 0 10px rgba(0,230,255,.4), inset 0 0 8px rgba(0,230,255,.25);
+}
+
+
+/* ===== 主容器與頁面 ===== */
+.main-container{
+  max-width: 1100px;
+  margin: 24px auto 80px;
+  padding: 0 16px;
+}
+.page{ display:none; }
+.page.active{ display:block; }
+
+
+.page-header{
+  display:flex; align-items:baseline; justify-content:space-between;
+  margin-bottom: 18px;
+}
+.page-title{
+  margin:0; font-size:24px; font-weight:700; color:#e8f0ff;
+  text-shadow: 0 0 18px rgba(124,92,255,.35);
+}
+
+
+/* ===== 輸入表單 ===== */
+.input-container{
+  background: rgba(27,33,61,.6);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+.input-form{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:16px; align-items:end; }
+.input-group{ display:flex; flex-direction:column; gap:8px; }
+.input-label{ font-size:13px; color: var(--muted); }
+.input-group input{
+  background:#111425; color:var(--text); border:1px solid var(--border);
+  padding:10px 12px; border-radius:10px; outline:none; transition:.2s;
+}
+.input-group input:focus{ border-color: rgba(124,92,255,.6); box-shadow: 0 0 0 3px rgba(124,92,255,.15); }
+.input-form .nav-tab{ height:42px; }
+
+
+/* ===== 排盤輸出 ===== */
+#bazi-result{
+  background: rgba(27,33,61,.6);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+  line-height:1.9;
+}
+#bazi-result p{ margin: 6px 0; }
+#bazi-pillars{ font-weight:700; }
+
+
+/* ===== 四時軍團卡 ===== */
+.army-container{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap:16px;
+}
+.army-card{
+  background: linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow:hidden;
+  position: relative;
+}
+.army-card:before{
+  content:"";
+  position:absolute; inset:0;
+  background: radial-gradient(500px 200px at -10% -20%, rgba(0,230,255,.1), transparent 60%),
+              radial-gradient(500px 200px at 110% 120%, rgba(124,92,255,.08), transparent 60%);
+  pointer-events:none;
+}
+.army-card-head{
+  padding: 12px 16px;
+  font-weight:700; letter-spacing:.08em;
+  border-bottom: 1px solid var(--border);
+  color: #bcd4ff;
+}
+.army-card-body{ padding: 14px 16px 16px; }
+.army-roles{ margin-bottom: 10px; }
+.army-badges{ display:flex; gap:8px; flex-wrap: wrap; margin-bottom: 10px; }
+.badge{
+  background: rgba(124,92,255,.12);
+  border:1px solid rgba(124,92,255,.35);
+  color:#cfc8ff; padding: 4px 8px; border-radius: 999px; font-size:12px;
+}
+.army-advice{ color:#dbe8ff; opacity:.9; font-size: 13px; margin: 8px 0 10px; }
+
+
+/* 故事區塊：限制高度 + 可展開 */
+.army-story{
+  background: rgba(255,255,255,.03);
+  border:1px dashed var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  max-height: 140px;
+  overflow: auto;
+  line-height:1.75;
+  transition: max-height .25s ease;
+}
+.army-story.expanded{ max-height: 420px; }
+.story-toggle-btn{
+  margin-top:10px; padding:8px 12px;
+  border:1px solid rgba(0,230,255,.4);
+  background: rgba(0,230,255,.08);
+  color: var(--neon);
+  border-radius: 10px; cursor:pointer; transition:.2s;
+}
+.story-toggle-btn:hover{
+  box-shadow: 0 0 14px rgba(0,230,255,.35), inset 0 0 10px rgba(0,230,255,.16);
+}
+
+
+/* ===== 詳細分析：圖表卡 ===== */
+.analysis-section{
+  background: rgba(27,33,61,.6);
+  border:1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 16px;
+  padding: 12px 14px 16px;
+  box-shadow: var(--shadow);
+}
+.analysis-section h3{
+  margin: 10px 4px 14px; color:#d7e5ff; font-size:18px;
+}
+canvas{ width:100% !important; max-height: 360px; }
+
+
+/* ===== Wiki ===== */
+#wiki-content{
+  background: rgba(27,33,61,.6);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px 18px;
+  box-shadow: var(--shadow);
+}
+
+
+/* ===== 自適應 ===== */
+@media (max-width: 920px){
+  .input-form{ grid-template-columns: 1fr; }
+  .army-container{ grid-template-columns: 1fr; }
+}
+
+
+/* ===== 小互動狀態 ===== */
+button, .nav-tab{ outline:none; }
+button:active, .nav-tab:active{ transform: translateY(1px); }
+
+
+/* ===== 輔助類 ===== */
+.hidden{ display:none !important; }
+.muted{ color: var(--muted); }
+.center{ text-align:center; }
+
+
+/* ===== 霓虹邊光（可用於需要的卡片） ===== */
+.neon-border{
+  border-color: rgba(0,230,255,.5);
+  box-shadow: 0 0 16px rgba(0,230,255,.28), inset 0 0 10px rgba(0,230,255,.16);
+}
+
+
+/* ===== 可點/不可點狀態 ===== */
+.is-disabled{
+  opacity:.6; pointer-events:none; filter: grayscale(.2);
+}
