@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
 npm-debug.log*
+package-lock.json
 
 # Build outputs
 dist/
@@ -8,6 +9,7 @@ build/
 
 # Development
 .DS_Store
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -25,3 +27,7 @@ build/
 # Temporary files
 tmp/
 temp/
+
+# Database
+*.sql.backup
+*.dump
